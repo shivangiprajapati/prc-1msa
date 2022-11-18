@@ -31,7 +31,7 @@
 source package -> Entity -> Boostrap.java -> @LoginConfig(authMethod = "MP-JWT") @DeclareRoles({"CUSTOMER"})
  ->EXAMSERVICE -> 
  
- @RolesAllowed("CUSTOMER")
+// @RolesAllowed("CUSTOMER")
     @GET
     @Path("getallgarments")
     @Produces(MediaType.APPLICATION_JSON)
@@ -39,7 +39,7 @@ source package -> Entity -> Boostrap.java -> @LoginConfig(authMethod = "MP-JWT")
         return gb.getallgarments();
     }
     
-    @RolesAllowed("CUSTOMER")
+   // @RolesAllowed("CUSTOMER")
     @GET
     @Path("getbycategory?category={id}")
     @Produces(MediaType.APPLICATION_JSON)
