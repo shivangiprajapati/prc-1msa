@@ -1,0 +1,163 @@
+          ----------------simple App -------------------------
+Java Maven -> Archtype ->jakarta8-payara->Name:-(ExamApp) -> DockerId -> finish -> sourcepackage ->Example Service ->
+-> src/main/ -> new folder ->META-INF -> propertiesfile ->Name(microprofile_config) -> (myclient/mp_rest/url = http://localhost:8081/ExamApp/rest/example/)JWT(mp.jwt.verify.publickey=_____link copy paste__________ mp.jwt.verify.issue=airhacks)->
+Sorcepackage-> app.services -> new java interface -> @RegisterRestClient(config = "myclient") -> public interface reat interface { @GET public String get();
+-> app.service -> servlet -> testservlet -> @Inject 2RestClient restinterface rl ; -> rl.get()-> pom-> 1.8 -> In folder file (payara micro server)->
+cmd (D:/ICT-3>java -jar payara-micro-5.2022.2.jar --deploy ExamApp/artifact/ExamApp.war --port 8081) 
+
+
+     ---------------- Client App------------------------
+
+Java Maven -> Archtype ->Name:-(ExamApp) -> DockerId -> finish -> sourcepackage ->Exam_client services ->nre interface -> RemoteClient ->
+-> src/main/ -> new folder ->META-INF -> propertiesfile ->Name(microprofile_config) -> (myclient/mp_rest/url = http://localhost:8081/ExamApp/rest/example/)->
+Sorcepackage-> app.services -> new java interface-> Remoteclient -> @RegisterRestClient(config = "myclient") -> public interface reat interface { @GET public String get();
+-> app.service -> servlet -> clientservlet -> @Inject 2RestClient restinterface rl; -> pom-> 1.8 -> In folder file (payara micro server)->
+cmd (D:/ICT-3>java -jar payara-micro-5.2022.2.jar --deploy ExamApp/artifact/ExamApp.war --port 8081) 
+
+      --------------Database Connection------------
+
+xampp -> database create -> Exam_app -> new -> persistenceunit-> exampu -> payara start -> console -> jdbc connection poll -> pol name(exampu) -> java sql.database->
+my sql -> create -> delete property -> (Servername :- localhost), (User :- root) (port namber :- 3306) (password :- root) (url :- jdbc:mysql://localhost:3306/database)
+(driverclass:- com.mysql.jdbc Driver )(Database Name :-com.mysql.jdbcDriver)(database Name :- )->
+ping-> jdbc resource -> new jdbc/exam -> ok -> project -> new connection -> Examp app -> Persistence unit -> source package -> service -> new -> session bean -> exampu -> 
+@persisteance.context(unit name = "exampu") -> EntityManager em ; -> servlet -> new -> Entity classes -> select source -> table select -> next ->
+tblstate -> public Collection<tbl State> getallstate() { reutrn em.createNamedQuery("tbl State.find.All").get ->
+Example service -> Entity file copy paste in client
+
+
+
+
+---------------external exam-------------------------------------------------------------------
+source package -> Entity -> Boostrap.java -> @LoginConfig(authMethod = "MP-JWT") @DeclareRoles({"CUSTOMER"})
+ ->EXAMSERVICE -> 
+ 
+ @RolesAllowed("CUSTOMER")
+    @GET
+    @Path("getallgarments")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Collection<Garments> getallgarments(){
+        return gb.getallgarments();
+    }
+    
+    @RolesAllowed("CUSTOMER")
+    @GET
+    @Path("getbycategory?category={id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Collection<Garments> getgarmentsbycategory(@PathParam("id")Integer categoryid){
+        return gb.getgarmentsbycategory(categoryid);
+    }
+    
+New-> sessionBean-> 
+
+
+@Stateless
+public class garmentsbean {
+    
+    @PersistenceContext(unitName = "com.external_EXTERNAL_EXAM_war_1.0-SNAPSHOTPU2")
+    EntityManager em;
+
+    public Collection<Garments> getallgarments(){
+        return em.createNamedQuery("Garments.findAll").getResultList();
+    }
+    
+    public Collection<Garments> getgarmentsbycategory(Integer categoryid){
+        Category cat = em.find(Category.class, categoryid);
+        return em.createNamedQuery("Garments.findbycategory").setParameter("categoryid", cat).getResultList();
+    }
+    
+    public Collection<Category> getallcategories(){
+        return em.createNamedQuery("Category.findAll").getResultList();
+    }
+}
+
+microprofile-config :--
+
+
+mp.jwt.verify.publickey=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApshiqEKiAagjLNLO2RrPlqpyxnz8iyECvcXVfSGjZvA40wXmfvJZgTyibDagBZKf3iSe3/9/nokKysaItVPAn7LMKgLBAa5RBe1Ra7q/nobQ/+RPBIllih74ayA32EovwvGi/mnNv0IBHqdQGpl47gXKJrN7B54mm5NZ/pCdYdbrgiD4Wi+KDh8KQgBOyj9r1bum0rnP8v4JaGovaZIYTAv/I9Hlqfg9kYxTclcoNRlLOFatFfsdlrso3V8cVhrA6XJKVHr8DnUMAcilDy1jsQ+cuA/a1oSb/Ph4vRcCWyleZAVGMRmhD2tVU6P8/O0np6n2U/bIRrEWGd1QEtyCvwIDAQAB
+mp.jwt.verify.issuer=airhacks
+
+
+persistance unit :- source :-
+
+<persistence-unit name="com.external_EXTERNAL_EXAM_war_1.0-SNAPSHOTPU2" transaction-type="JTA">
+    <jta-data-source>java:app/jdbc/external_data</jta-data-source>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties/>
+
+
+--------------------------------Client-----------------------------------------------
+
+sourcepackage :- Entity :- -> service -> categoryServlet ->   @Inject @RestClient RemoteClient rc;
+for(Category c: categories){
+                out.println("<option value='"+c.getCategoryid()+"' label='"+c.getCategoryname()+"'>"+"</option>");
+            }
+
+Remote Servlet :- 
+for(Garments g: gb){
+                if(g.getOrdersCollection().stream().findFirst().isPresent()){
+                    Customer cust = g.getOrdersCollection().stream().findFirst().get().getCustomerid();
+                    out.println("<p>Garment ID: " + g.getGarmentid() + "</p>");
+                    out.println("<p>Category: " + g.getCategoryid().getCategoryname() + "</p>");
+                    out.println("<p>Price: " + g.getPrice() +"</p>" );
+                    out.println("<p>Customer Name: " + cust.getCustomerName() + "</p>");
+                    out.println("<p>Customer Phone: " + cust.getMobile() + "</p>");
+                    out.println("<p>Customer City: " + cust.getCity() + "</p>");
+                }
+
+result servlet :-
+ for(Garments g: getgarments){
+                if(g.getOrdersCollection().stream().findFirst().isPresent()){
+                    Customer c = g.getOrdersCollection().stream().findFirst().get().getCustomerid();
+                    out.println("<p>Garment ID: "+g.getGarmentid()+"</p>");
+                    out.println("<p>Category: "+g.getCategoryid().getCategoryname()+"</p>");
+                    out.println("<p>Price: "+g.getPrice()+"</p>");
+                    out.println("<p>Customer Name: "+c.getCustomerName()+"</p>");
+                    out.println("<p>Mobile No: "+c.getMobile()+"</p>");
+                    Date date = g.getOrdersCollection().stream().findFirst().get().getDate();
+                    String OrderDate = DateFormat.getDateInstance().format(date);
+                    out.println("<p>Order Date: "+OrderDate+"</p>");
+                    out.println("<p>City: "+c.getCity()+"</p>");
+                }else{
+                    out.println("<p>Garment ID: "+g.getGarmentid()+"</p>");
+                    out.println("<p>Category: "+g.getCategoryid().getCategoryname()+"</p>");
+                    out.println("<p>Price: "+g.getPrice()+"</p>");
+                }
+
+Interface :- remote client:-
+@RegisterRestClient(baseUri = "http://localhost:8085/EXTERNAL_EXAM/rest/example/")
+public interface RemoteClient {
+    
+    @ClientHeaderParam(name="authorization", value="Bearer eyJraWQiOiJqd3Qua2V5IiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJkdWtlIiwidXBuIjoiZHVrZSIsImF1dGhfdGltZSI6MTY2ODc1Mzc4MywiaXNzIjoiYWlyaGFja3MiLCJncm91cHMiOlsiQ1VTVE9NRVIiXSwiZXhwIjoxNjY4ODUzNzgzLCJpYXQiOjE2Njg3NTM3ODMsImp0aSI6IjQyIn0.Lzfs6TscEfK_HbW6NMO_q-zV8JZYCFMDsTkmz-xL53azv9WkHmOgCAZXH15Zy6msAVxmSvH3vbiHJqZYNT5thaeeOK7oyTVYyNQzMjdBS46MJJabmwQBTg7j3J7pfkBlH1Koe4N1abB2LlPlREf-hhV_bPW1ejMQXdZ0C5Jriw5uYXhiOQWa6pwxsNn-oimcjVKa0ACAvLFzFV47WJr7bE3-8268mcqLo3ZmQVOFaiqwW0iBr2O6vhLNVO-uBA2T9S2SW_eXfWHy1qeI68Uf9GqrwSeFwBdelOX9emc26nQa7z2_t6Lwct_y5eK6kvrvmYcauZcAIqqrE4UX2WtulQ")
+    @GET
+    @Path("getallgarments")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Collection<Garments> getallgarments();
+    
+    @ClientHeaderParam(name="authorization", value="Bearer eyJraWQiOiJqd3Qua2V5IiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJkdWtlIiwidXBuIjoiZHVrZSIsImF1dGhfdGltZSI6MTY2ODc1Mzc4MywiaXNzIjoiYWlyaGFja3MiLCJncm91cHMiOlsiQ1VTVE9NRVIiXSwiZXhwIjoxNjY4ODUzNzgzLCJpYXQiOjE2Njg3NTM3ODMsImp0aSI6IjQyIn0.Lzfs6TscEfK_HbW6NMO_q-zV8JZYCFMDsTkmz-xL53azv9WkHmOgCAZXH15Zy6msAVxmSvH3vbiHJqZYNT5thaeeOK7oyTVYyNQzMjdBS46MJJabmwQBTg7j3J7pfkBlH1Koe4N1abB2LlPlREf-hhV_bPW1ejMQXdZ0C5Jriw5uYXhiOQWa6pwxsNn-oimcjVKa0ACAvLFzFV47WJr7bE3-8268mcqLo3ZmQVOFaiqwW0iBr2O6vhLNVO-uBA2T9S2SW_eXfWHy1qeI68Uf9GqrwSeFwBdelOX9emc26nQa7z2_t6Lwct_y5eK6kvrvmYcauZcAIqqrE4UX2WtulQ")
+    @GET
+    @Path("getbycategory?category={id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Collection<Garments> getgarmentsbycategory(@PathParam("id")Integer categoryid);
+    
+    @ClientHeaderParam(name="authorization", value="Bearer eyJraWQiOiJqd3Qua2V5IiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJkdWtlIiwidXBuIjoiZHVrZSIsImF1dGhfdGltZSI6MTY2ODc1Mzc4MywiaXNzIjoiYWlyaGFja3MiLCJncm91cHMiOlsiQ1VTVE9NRVIiXSwiZXhwIjoxNjY4ODUzNzgzLCJpYXQiOjE2Njg3NTM3ODMsImp0aSI6IjQyIn0.Lzfs6TscEfK_HbW6NMO_q-zV8JZYCFMDsTkmz-xL53azv9WkHmOgCAZXH15Zy6msAVxmSvH3vbiHJqZYNT5thaeeOK7oyTVYyNQzMjdBS46MJJabmwQBTg7j3J7pfkBlH1Koe4N1abB2LlPlREf-hhV_bPW1ejMQXdZ0C5Jriw5uYXhiOQWa6pwxsNn-oimcjVKa0ACAvLFzFV47WJr7bE3-8268mcqLo3ZmQVOFaiqwW0iBr2O6vhLNVO-uBA2T9S2SW_eXfWHy1qeI68Uf9GqrwSeFwBdelOX9emc26nQa7z2_t6Lwct_y5eK6kvrvmYcauZcAIqqrE4UX2WtulQ")
+    @GET
+    @Path("getallcategories")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Collection<Category> getallcategories();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
