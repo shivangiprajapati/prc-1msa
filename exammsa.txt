@@ -1,28 +1,28 @@
           ----------------simple App -------------------------
-Java Maven -> Archtype ->jakarta8-payara->Name:-(ExamApp) -> DockerId -> finish -> sourcepackage ->Example Service ->
--> src/main/ -> new folder ->META-INF -> propertiesfile ->Name(microprofile_config) -> (myclient/mp_rest/url = http://localhost:8081/ExamApp/rest/example/)JWT(mp.jwt.verify.publickey=_____link copy paste__________ mp.jwt.verify.issue=airhacks)->
-Sorcepackage-> app.services -> new java interface -> @RegisterRestClient(config = "myclient") -> public interface reat interface { @GET public String get();
--> app.service -> servlet -> testservlet -> @Inject 2RestClient restinterface rl ; -> rl.get()-> pom-> 1.8 -> In folder file (payara micro server)->
-cmd (D:/ICT-3>java -jar payara-micro-5.2022.2.jar --deploy ExamApp/artifact/ExamApp.war --port 8081) 
+//Java Maven -> Archtype ->jakarta8-payara->Name:-(ExamApp) -> DockerId -> finish -> sourcepackage ->Example Service ->
+//-> src/main/ -> new folder ->META-INF -> propertiesfile ->Name(microprofile_config) -> (myclient/mp_rest/url = //http://localhost:8081/ExamApp/rest/example/)JWT(mp.jwt.verify.publickey=_____link copy paste__________ mp.jwt.verify.issue=airhacks)->
+//Sorcepackage-> app.services -> new java interface -> @RegisterRestClient(config = "myclient") -> public interface reat interface { @GET public String get();
+//-> app.service -> servlet -> testservlet -> @Inject 2RestClient restinterface rl ; -> rl.get()-> pom-> 1.8 -> In folder file (payara micro server)->
+//cmd (D:/ICT-3>java -jar payara-micro-5.2022.2.jar --deploy ExamApp/artifact/ExamApp.war --port 8081) 
 
 
      ---------------- Client App------------------------
 
-Java Maven -> Archtype ->Name:-(ExamApp) -> DockerId -> finish -> sourcepackage ->Exam_client services ->nre interface -> RemoteClient ->
--> src/main/ -> new folder ->META-INF -> propertiesfile ->Name(microprofile_config) -> (myclient/mp_rest/url = http://localhost:8081/ExamApp/rest/example/)->
-Sorcepackage-> app.services -> new java interface-> Remoteclient -> @RegisterRestClient(config = "myclient") -> public interface reat interface { @GET public String get();
--> app.service -> servlet -> clientservlet -> @Inject 2RestClient restinterface rl; -> pom-> 1.8 -> In folder file (payara micro server)->
-cmd (D:/ICT-3>java -jar payara-micro-5.2022.2.jar --deploy ExamApp/artifact/ExamApp.war --port 8081) 
+//Java Maven -> Archtype ->Name:-(ExamApp) -> DockerId -> finish -> sourcepackage ->Exam_client services ->nre interface -> RemoteClient ->
+//-> src/main/ -> new folder ->META-INF -> propertiesfile ->Name(microprofile_config) -> (myclient/mp_rest/url = http://localhost:8081/ExamApp/rest/example/)->
+//Sorcepackage-> app.services -> new java interface-> Remoteclient -> @RegisterRestClient(config = "myclient") -> public interface reat interface { @GET public String //get();
+//-> app.service -> servlet -> clientservlet -> @Inject 2RestClient restinterface rl; -> pom-> 1.8 -> In folder file (payara micro server)->
+//cmd (D:/ICT-3>java -jar payara-micro-5.2022.2.jar --deploy ExamApp/artifact/ExamApp.war --port 8081) 
 
       --------------Database Connection------------
 
-xampp -> database create -> Exam_app -> new -> persistenceunit-> exampu -> payara start -> console -> jdbc connection poll -> pol name(exampu) -> java sql.database->
-my sql -> create -> delete property -> (Servername :- localhost), (User :- root) (port namber :- 3306) (password :- root) (url :- jdbc:mysql://localhost:3306/database)
-(driverclass:- com.mysql.jdbc Driver )(Database Name :-com.mysql.jdbcDriver)(database Name :- )->
-ping-> jdbc resource -> new jdbc/exam -> ok -> project -> new connection -> Examp app -> Persistence unit -> source package -> service -> new -> session bean -> exampu -> 
-@persisteance.context(unit name = "exampu") -> EntityManager em ; -> servlet -> new -> Entity classes -> select source -> table select -> next ->
-tblstate -> public Collection<tbl State> getallstate() { reutrn em.createNamedQuery("tbl State.find.All").get ->
-Example service -> Entity file copy paste in client
+//xampp -> database create -> Exam_app -> new -> persistenceunit-> exampu -> payara start -> console -> jdbc connection poll -> pol name(exampu) -> java sql.database->
+//my sql -> create -> delete property -> (Servername :- localhost), (User :- root) (port namber :- 3306) (password :- root) (url :- //jdbc:mysql://localhost:3306/database)
+//(driverclass:- com.mysql.jdbc Driver )(Database Name :-com.mysql.jdbcDriver)(database Name :- )->
+//ping-> jdbc resource -> new jdbc/exam -> ok -> project -> new connection -> Examp app -> Persistence unit -> source package -> service -> new -> session bean -> //exampu -> 
+//@persisteance.context(unit name = "exampu") -> EntityManager em ; -> servlet -> new -> Entity classes -> select source -> table select -> next ->
+//tblstate -> public Collection<tbl State> getallstate() { reutrn em.createNamedQuery("tbl State.find.All").get ->
+//Example service -> Entity file copy paste in client
 
 
 
