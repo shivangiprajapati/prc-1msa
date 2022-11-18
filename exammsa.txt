@@ -53,19 +53,19 @@ New-> sessionBean->
 @Stateless
 public class garmentsbean {
     
-    @PersistenceContext(unitName = "com.external_EXTERNAL_EXAM_war_1.0-SNAPSHOTPU2")
+   // @PersistenceContext(unitName = "com.external_EXTERNAL_EXAM_war_1.0-SNAPSHOTPU2")
     EntityManager em;
 
-    public Collection<Garments> getallgarments(){
+    //public Collection<Garments> getallgarments(){
         return em.createNamedQuery("Garments.findAll").getResultList();
     }
     
-    public Collection<Garments> getgarmentsbycategory(Integer categoryid){
+    //public Collection<Garments> getgarmentsbycategory(Integer categoryid){
         Category cat = em.find(Category.class, categoryid);
         return em.createNamedQuery("Garments.findbycategory").setParameter("categoryid", cat).getResultList();
     }
     
-    public Collection<Category> getallcategories(){
+    //public Collection<Category> getallcategories(){
         return em.createNamedQuery("Category.findAll").getResultList();
     }
 }
@@ -79,7 +79,7 @@ mp.jwt.verify.issuer=airhacks
 
 persistance unit :- source :-
 
-<persistence-unit name="com.external_EXTERNAL_EXAM_war_1.0-SNAPSHOTPU2" transaction-type="JTA">
+//<persistence-unit name="com.external_EXTERNAL_EXAM_war_1.0-SNAPSHOTPU2" transaction-type="JTA">
     <jta-data-source>java:app/jdbc/external_data</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties/>
@@ -88,12 +88,12 @@ persistance unit :- source :-
 --------------------------------Client-----------------------------------------------
 
 sourcepackage :- Entity :- -> service -> categoryServlet ->   @Inject @RestClient RemoteClient rc;
-for(Category c: categories){
+//for(Category c: categories){
                 out.println("<option value='"+c.getCategoryid()+"' label='"+c.getCategoryname()+"'>"+"</option>");
             }
 
 Remote Servlet :- 
-for(Garments g: gb){
+//for(Garments g: gb){
                 if(g.getOrdersCollection().stream().findFirst().isPresent()){
                     Customer cust = g.getOrdersCollection().stream().findFirst().get().getCustomerid();
                     out.println("<p>Garment ID: " + g.getGarmentid() + "</p>");
@@ -105,7 +105,7 @@ for(Garments g: gb){
                 }
 
 result servlet :-
- for(Garments g: getgarments){
+ //for(Garments g: getgarments){
                 if(g.getOrdersCollection().stream().findFirst().isPresent()){
                     Customer c = g.getOrdersCollection().stream().findFirst().get().getCustomerid();
                     out.println("<p>Garment ID: "+g.getGarmentid()+"</p>");
@@ -127,22 +127,22 @@ Interface :- remote client:-
 @RegisterRestClient(baseUri = "http://localhost:8085/EXTERNAL_EXAM/rest/example/")
 public interface RemoteClient {
     
-    @ClientHeaderParam(name="authorization", value="Bearer eyJraWQiOiJqd3Qua2V5IiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJkdWtlIiwidXBuIjoiZHVrZSIsImF1dGhfdGltZSI6MTY2ODc1Mzc4MywiaXNzIjoiYWlyaGFja3MiLCJncm91cHMiOlsiQ1VTVE9NRVIiXSwiZXhwIjoxNjY4ODUzNzgzLCJpYXQiOjE2Njg3NTM3ODMsImp0aSI6IjQyIn0.Lzfs6TscEfK_HbW6NMO_q-zV8JZYCFMDsTkmz-xL53azv9WkHmOgCAZXH15Zy6msAVxmSvH3vbiHJqZYNT5thaeeOK7oyTVYyNQzMjdBS46MJJabmwQBTg7j3J7pfkBlH1Koe4N1abB2LlPlREf-hhV_bPW1ejMQXdZ0C5Jriw5uYXhiOQWa6pwxsNn-oimcjVKa0ACAvLFzFV47WJr7bE3-8268mcqLo3ZmQVOFaiqwW0iBr2O6vhLNVO-uBA2T9S2SW_eXfWHy1qeI68Uf9GqrwSeFwBdelOX9emc26nQa7z2_t6Lwct_y5eK6kvrvmYcauZcAIqqrE4UX2WtulQ")
-    @GET
+   // @ClientHeaderParam(name="authorization", value="Bearer eyJraWQiOiJqd3Qua2V5IiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJkdWtlIiwidXBuIjoiZHVrZSIsImF1dGhfdGltZSI6MTY2ODc1Mzc4MywiaXNzIjoiYWlyaGFja3MiLCJncm91cHMiOlsiQ1VTVE9NRVIiXSwiZXhwIjoxNjY4ODUzNzgzLCJpYXQiOjE2Njg3NTM3ODMsImp0aSI6IjQyIn0.Lzfs6TscEfK_HbW6NMO_q-zV8JZYCFMDsTkmz-xL53azv9WkHmOgCAZXH15Zy6msAVxmSvH3vbiHJqZYNT5thaeeOK7oyTVYyNQzMjdBS46MJJabmwQBTg7j3J7pfkBlH1Koe4N1abB2LlPlREf-hhV_bPW1ejMQXdZ0C5Jriw5uYXhiOQWa6pwxsNn-oimcjVKa0ACAvLFzFV47WJr7bE3-8268mcqLo3ZmQVOFaiqwW0iBr2O6vhLNVO-uBA2T9S2SW_eXfWHy1qeI68Uf9GqrwSeFwBdelOX9emc26nQa7z2_t6Lwct_y5eK6kvrvmYcauZcAIqqrE4UX2WtulQ")
+    //@GET
     @Path("getallgarments")
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<Garments> getallgarments();
     
-    @ClientHeaderParam(name="authorization", value="Bearer eyJraWQiOiJqd3Qua2V5IiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJkdWtlIiwidXBuIjoiZHVrZSIsImF1dGhfdGltZSI6MTY2ODc1Mzc4MywiaXNzIjoiYWlyaGFja3MiLCJncm91cHMiOlsiQ1VTVE9NRVIiXSwiZXhwIjoxNjY4ODUzNzgzLCJpYXQiOjE2Njg3NTM3ODMsImp0aSI6IjQyIn0.Lzfs6TscEfK_HbW6NMO_q-zV8JZYCFMDsTkmz-xL53azv9WkHmOgCAZXH15Zy6msAVxmSvH3vbiHJqZYNT5thaeeOK7oyTVYyNQzMjdBS46MJJabmwQBTg7j3J7pfkBlH1Koe4N1abB2LlPlREf-hhV_bPW1ejMQXdZ0C5Jriw5uYXhiOQWa6pwxsNn-oimcjVKa0ACAvLFzFV47WJr7bE3-8268mcqLo3ZmQVOFaiqwW0iBr2O6vhLNVO-uBA2T9S2SW_eXfWHy1qeI68Uf9GqrwSeFwBdelOX9emc26nQa7z2_t6Lwct_y5eK6kvrvmYcauZcAIqqrE4UX2WtulQ")
+    //@ClientHeaderParam(name="authorization", value="Bearer eyJraWQiOiJqd3Qua2V5IiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJkdWtlIiwidXBuIjoiZHVrZSIsImF1dGhfdGltZSI6MTY2ODc1Mzc4MywiaXNzIjoiYWlyaGFja3MiLCJncm91cHMiOlsiQ1VTVE9NRVIiXSwiZXhwIjoxNjY4ODUzNzgzLCJpYXQiOjE2Njg3NTM3ODMsImp0aSI6IjQyIn0.Lzfs6TscEfK_HbW6NMO_q-zV8JZYCFMDsTkmz-xL53azv9WkHmOgCAZXH15Zy6msAVxmSvH3vbiHJqZYNT5thaeeOK7oyTVYyNQzMjdBS46MJJabmwQBTg7j3J7pfkBlH1Koe4N1abB2LlPlREf-hhV_bPW1ejMQXdZ0C5Jriw5uYXhiOQWa6pwxsNn-oimcjVKa0ACAvLFzFV47WJr7bE3-8268mcqLo3ZmQVOFaiqwW0iBr2O6vhLNVO-uBA2T9S2SW_eXfWHy1qeI68Uf9GqrwSeFwBdelOX9emc26nQa7z2_t6Lwct_y5eK6kvrvmYcauZcAIqqrE4UX2WtulQ")
     @GET
-    @Path("getbycategory?category={id}")
+    //@Path("getbycategory?category={id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<Garments> getgarmentsbycategory(@PathParam("id")Integer categoryid);
     
-    @ClientHeaderParam(name="authorization", value="Bearer eyJraWQiOiJqd3Qua2V5IiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJkdWtlIiwidXBuIjoiZHVrZSIsImF1dGhfdGltZSI6MTY2ODc1Mzc4MywiaXNzIjoiYWlyaGFja3MiLCJncm91cHMiOlsiQ1VTVE9NRVIiXSwiZXhwIjoxNjY4ODUzNzgzLCJpYXQiOjE2Njg3NTM3ODMsImp0aSI6IjQyIn0.Lzfs6TscEfK_HbW6NMO_q-zV8JZYCFMDsTkmz-xL53azv9WkHmOgCAZXH15Zy6msAVxmSvH3vbiHJqZYNT5thaeeOK7oyTVYyNQzMjdBS46MJJabmwQBTg7j3J7pfkBlH1Koe4N1abB2LlPlREf-hhV_bPW1ejMQXdZ0C5Jriw5uYXhiOQWa6pwxsNn-oimcjVKa0ACAvLFzFV47WJr7bE3-8268mcqLo3ZmQVOFaiqwW0iBr2O6vhLNVO-uBA2T9S2SW_eXfWHy1qeI68Uf9GqrwSeFwBdelOX9emc26nQa7z2_t6Lwct_y5eK6kvrvmYcauZcAIqqrE4UX2WtulQ")
-    @GET
+   // @ClientHeaderParam(name="authorization", value="Bearer eyJraWQiOiJqd3Qua2V5IiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJkdWtlIiwidXBuIjoiZHVrZSIsImF1dGhfdGltZSI6MTY2ODc1Mzc4MywiaXNzIjoiYWlyaGFja3MiLCJncm91cHMiOlsiQ1VTVE9NRVIiXSwiZXhwIjoxNjY4ODUzNzgzLCJpYXQiOjE2Njg3NTM3ODMsImp0aSI6IjQyIn0.Lzfs6TscEfK_HbW6NMO_q-zV8JZYCFMDsTkmz-xL53azv9WkHmOgCAZXH15Zy6msAVxmSvH3vbiHJqZYNT5thaeeOK7oyTVYyNQzMjdBS46MJJabmwQBTg7j3J7pfkBlH1Koe4N1abB2LlPlREf-hhV_bPW1ejMQXdZ0C5Jriw5uYXhiOQWa6pwxsNn-oimcjVKa0ACAvLFzFV47WJr7bE3-8268mcqLo3ZmQVOFaiqwW0iBr2O6vhLNVO-uBA2T9S2SW_eXfWHy1qeI68Uf9GqrwSeFwBdelOX9emc26nQa7z2_t6Lwct_y5eK6kvrvmYcauZcAIqqrE4UX2WtulQ")
+    //@GET
     @Path("getallcategories")
-    @Produces(MediaType.APPLICATION_JSON)
+    //@Produces(MediaType.APPLICATION_JSON)
     public Collection<Category> getallcategories();
 }
 
